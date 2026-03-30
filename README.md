@@ -42,6 +42,36 @@ Several introductory notebooks will be added over time, covering small models, e
 12. [control_recycling_alloy_ampl_python.ipynb](./control_recycling_alloy_ampl_python.ipynb)
    AMPL-from-Python notebook for the same course control on alloy blending, including model verification of the final composition.
 
+13. [problem_6_pilot_assignment_pure_python.ipynb](./problem_6_pilot_assignment_pure_python.ipynb)
+   Pure Python notebook for book problem `2.6`, solving the pilot assignment model with five exact methods.
+
+14. [problem_6_pilot_assignment_ampl_python.ipynb](./problem_6_pilot_assignment_ampl_python.ipynb)
+   AMPL-from-Python notebook for the pilot assignment problem from book section `2.6`.
+
+15. [problem_7_transportation_pure_python.ipynb](./problem_7_transportation_pure_python.ipynb)
+   Pure Python notebook for book problem `2.7`, including an exact reduced search interpretation of the balanced transportation model.
+
+16. [problem_7_transportation_ampl_python.ipynb](./problem_7_transportation_ampl_python.ipynb)
+   AMPL-from-Python notebook for the transportation problem from book section `2.7`.
+
+17. [problem_8_investment_pure_python.ipynb](./problem_8_investment_pure_python.ipynb)
+   Pure Python notebook for book problem `2.8`, including both student variations and exact per-traveler separation for the individual-budget case.
+
+18. [problem_8_investment_ampl_python.ipynb](./problem_8_investment_ampl_python.ipynb)
+   AMPL-from-Python notebook for the investment problem from book section `2.8` and its two proposed variations.
+
+19. [problem_9_italian_restaurant_pure_python.ipynb](./problem_9_italian_restaurant_pure_python.ipynb)
+   Pure Python notebook for book problem `2.9`, including the minimum-3-plates variation and five exact methods.
+
+20. [problem_9_italian_restaurant_ampl_python.ipynb](./problem_9_italian_restaurant_ampl_python.ipynb)
+   AMPL-from-Python notebook for the Italian restaurant problem from book section `2.9` and its proposed variation.
+
+21. [problem_10_diet_pure_python.ipynb](./problem_10_diet_pure_python.ipynb)
+   Pure Python notebook for book problem `2.10`, solving the mixed diet model exactly and adding a classroom upper-bound variant.
+
+22. [problem_10_diet_ampl_python.ipynb](./problem_10_diet_ampl_python.ipynb)
+   AMPL-from-Python notebook for the diet problem from book section `2.10`, including the classroom upper-bound variation.
+
 ## Problems Covered So Far
 
 - Carpenter problem (book `2.1`) and its three-product variant
@@ -49,6 +79,11 @@ Several introductory notebooks will be added over time, covering small models, e
 - Fishing problem (book `2.3`) and a selective-fishing reformulation for the proposed variant
 - Refrigerated vehicles problem (book `2.4`)
 - Bus assignment problem with 8-hour consecutive shifts (book `2.5`)
+- Pilot assignment problem (book `2.6`)
+- Transportation problem (book `2.7`)
+- Investment problem (book `2.8`) and its two student variations
+- Italian restaurant problem (book `2.9`) and the minimum-3-plates variation
+- Diet problem (book `2.10`) and a classroom upper-bound reformulation
 - Course control: recycling alloy blending with composition bounds
 
 ## Methods Included
