@@ -72,6 +72,36 @@ Several introductory notebooks will be added over time, covering small models, e
 22. [problem_10_diet_ampl_python.ipynb](./problem_10_diet_ampl_python.ipynb)
    AMPL-from-Python notebook for the diet problem from book section `2.10`, including the classroom upper-bound variation.
 
+23. [problem_11_shoe_purchase_pure_python.ipynb](./problem_11_shoe_purchase_pure_python.ipynb)
+   Pure Python notebook for book problem `2.11`, solved with five exact methods and an explicit note about the `30` vs. `50` boxes inconsistency in the text.
+
+24. [problem_11_shoe_purchase_ampl_python.ipynb](./problem_11_shoe_purchase_ampl_python.ipynb)
+   AMPL-from-Python notebook for the shoe-purchase problem from book section `2.11`, following the printed equations and published optimum.
+
+25. [problem_12_knapsack_pure_python.ipynb](./problem_12_knapsack_pure_python.ipynb)
+   Pure Python notebook for book problem `2.12`, including the student pair-constraint variation and five exact methods.
+
+26. [problem_12_knapsack_ampl_python.ipynb](./problem_12_knapsack_ampl_python.ipynb)
+   AMPL-from-Python notebook for the knapsack problem from book section `2.12` and its mandatory-pairs variation.
+
+27. [problem_13_soccer_lineup_pure_python.ipynb](./problem_13_soccer_lineup_pure_python.ipynb)
+   Pure Python notebook for book problem `2.13`, solving the soccer-lineup assignment with five exact methods.
+
+28. [problem_13_soccer_lineup_ampl_python.ipynb](./problem_13_soccer_lineup_ampl_python.ipynb)
+   AMPL-from-Python notebook for the soccer-lineup problem from book section `2.13`.
+
+29. [problem_14_baby_shower_pure_python.ipynb](./problem_14_baby_shower_pure_python.ipynb)
+   Pure Python notebook for book problem `2.14`, solving the invitation logic model with five exact methods.
+
+30. [problem_14_baby_shower_ampl_python.ipynb](./problem_14_baby_shower_ampl_python.ipynb)
+   AMPL-from-Python notebook for the baby-shower problem from book section `2.14`.
+
+31. [problem_15_set_covering_pure_python.ipynb](./problem_15_set_covering_pure_python.ipynb)
+   Pure Python notebook for book problem `2.15`, covering both the minimum-cost and maximum-population models with five exact methods.
+
+32. [problem_15_set_covering_ampl_python.ipynb](./problem_15_set_covering_ampl_python.ipynb)
+   AMPL-from-Python notebook for the two set-covering models from book section `2.15`.
+
 ## Problems Covered So Far
 
 - Carpenter problem (book `2.1`) and its three-product variant
@@ -84,12 +114,17 @@ Several introductory notebooks will be added over time, covering small models, e
 - Investment problem (book `2.8`) and its two student variations
 - Italian restaurant problem (book `2.9`) and the minimum-3-plates variation
 - Diet problem (book `2.10`) and a classroom upper-bound reformulation
+- Shoe purchase problem (book `2.11`) with the printed-model consistency note
+- Knapsack problem (book `2.12`) and its mandatory-pairs variation
+- Soccer lineup problem (book `2.13`)
+- Baby shower invitation problem (book `2.14`)
+- Fire-station set covering problem (book `2.15`) for both minimum-cost and printed maximum-population models
 - Course control: recycling alloy blending with composition bounds
 
 ## Methods Included
 
 - Naive enumeration
-- Backtracking
+- Backtracking with pruning
 - Optimized enumeration
 - Constraint-driven reduced search
 - Dynamic programming
