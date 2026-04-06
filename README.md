@@ -13,22 +13,22 @@ Several introductory notebooks will be added over time, covering small models, e
    Introductory notebook that models and solves the same carpenter problem in AMPL from Python using `amplpy`.
 
 3. [problem_2_technology_production_pure_python.ipynb](./problem_2_technology_production_pure_python.ipynb)
-   Pure Python notebook for book problem 2 (`2.2`), including the split production/assembly variant and executable verification of the textbook optimum.
+   Pure Python notebook for book problem `2.2`, including the split production/assembly variant and executable verification of the textbook optimum.
 
 4. [problem_2_technology_production_ampl_python.ipynb](./problem_2_technology_production_ampl_python.ipynb)
-   AMPL-from-Python notebook for the same technology production model and its proposed variant.
+   AMPL-from-Python notebook for book problem `2.2` and its proposed variant.
 
 5. [problem_3_fishing_pure_python.ipynb](./problem_3_fishing_pure_python.ipynb)
-   Pure Python notebook for book problem 3 (`2.3`), including the textbook model plus a clearly stated selective-fishing variant reformulation.
+   Pure Python notebook for book problem `2.3`, including the textbook model plus a clearly stated selective-fishing variant reformulation.
 
 6. [problem_3_fishing_ampl_python.ipynb](./problem_3_fishing_ampl_python.ipynb)
-   AMPL-from-Python notebook for the fishing problem and the illustrative selective-fishing reformulation.
+   AMPL-from-Python notebook for book problem `2.3` and the illustrative selective-fishing reformulation.
 
 7. [problem_4_refrigerated_vehicles_pure_python.ipynb](./problem_4_refrigerated_vehicles_pure_python.ipynb)
-   Pure Python notebook for book problem 4 (`2.4`), with executable verification of the published optimum.
+   Pure Python notebook for book problem `2.4`, with executable verification of the published optimum.
 
 8. [problem_4_refrigerated_vehicles_ampl_python.ipynb](./problem_4_refrigerated_vehicles_ampl_python.ipynb)
-   AMPL-from-Python notebook for the refrigerated-vehicles model from book section `2.4`.
+   AMPL-from-Python notebook for book problem `2.4`.
 
 9. [bus_assignment_pure_python.ipynb](./bus_assignment_pure_python.ipynb)
    Exact-methods notebook for the cyclic bus assignment problem in pure Python, including multiple optimal solutions analysis.
@@ -125,7 +125,6 @@ Several introductory notebooks will be added over time, covering small models, e
 
 - Naive enumeration
 - Backtracking with pruning
-- Optimized enumeration
 - Constraint-driven reduced search
 - Dynamic programming
 - Branch and Bound
