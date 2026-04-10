@@ -1,6 +1,6 @@
 # Opti
 
-This repository collects beginner-level notebooks on mixed-integer linear programming.
+This repository collects beginner-level notebooks on linear and mixed-integer linear programming.
 
 Several introductory notebooks will be added over time, covering small models, exact methods, and implementation ideas for students getting started with MILP.
 
@@ -102,6 +102,36 @@ Several introductory notebooks will be added over time, covering small models, e
 32. [problem_15_set_covering_ampl_python.ipynb](./problem_15_set_covering_ampl_python.ipynb)
    AMPL-from-Python notebook for the two set-covering models from book section `2.15`.
 
+33. [problem_3_1_war_supply_pure_python.ipynb](./problem_3_1_war_supply_pure_python.ipynb)
+   Pure Python notebook for book problem `3.1`, using exact search plus textbook-plan verification for the multi-optimum war-supply model.
+
+34. [problem_3_1_war_supply_ampl_python.ipynb](./problem_3_1_war_supply_ampl_python.ipynb)
+   AMPL-from-Python notebook for the war-supply problem from book section `3.1`.
+
+35. [problem_3_2_wood_cutting_pure_python.ipynb](./problem_3_2_wood_cutting_pure_python.ipynb)
+   Pure Python notebook for book problem `3.2`, solving the efficient-pattern cutting model with three exact techniques.
+
+36. [problem_3_2_wood_cutting_ampl_python.ipynb](./problem_3_2_wood_cutting_ampl_python.ipynb)
+   AMPL-from-Python notebook for the wood-cutting problem from book section `3.2`.
+
+37. [problem_3_3_mask_inventory_pure_python.ipynb](./problem_3_3_mask_inventory_pure_python.ipynb)
+   Pure Python notebook for book problem `3.3`, solving the four-month mask-inventory model with exact inventory-state techniques.
+
+38. [problem_3_3_mask_inventory_ampl_python.ipynb](./problem_3_3_mask_inventory_ampl_python.ipynb)
+   AMPL-from-Python notebook for the mask-inventory problem from book section `3.3`.
+
+39. [problem_3_4_airplane_distribution_pure_python.ipynb](./problem_3_4_airplane_distribution_pure_python.ipynb)
+   Pure Python notebook for book problem `3.4`, using structural exact reasoning to certify the published cargo mix and one feasible optimal layout.
+
+40. [problem_3_4_airplane_distribution_ampl_python.ipynb](./problem_3_4_airplane_distribution_ampl_python.ipynb)
+   AMPL-from-Python notebook for the airplane-distribution problem from book section `3.4`.
+
+41. [problem_3_5_fuel_blending_pure_python.ipynb](./problem_3_5_fuel_blending_pure_python.ipynb)
+   Pure Python notebook for book problem `3.5`, keeping the continuous blending algebra exact with rational arithmetic.
+
+42. [problem_3_5_fuel_blending_ampl_python.ipynb](./problem_3_5_fuel_blending_ampl_python.ipynb)
+   AMPL-from-Python notebook for the fuel-blending problem from book section `3.5`.
+
 ## Problems Covered So Far
 
 - Carpenter problem (book `2.1`) and its three-product variant
@@ -120,6 +150,11 @@ Several introductory notebooks will be added over time, covering small models, e
 - Baby shower invitation problem (book `2.14`)
 - Fire-station set covering problem (book `2.15`) for both minimum-cost and printed maximum-population models
 - Course control: recycling alloy blending with composition bounds
+- War supply problem (book `3.1`)
+- Wood cutting problem (book `3.2`)
+- Mask inventory planning problem (book `3.3`)
+- Airplane cargo-distribution problem (book `3.4`)
+- Fuel blending problem (book `3.5`)
 
 ## Methods Included
 
@@ -128,6 +163,7 @@ Several introductory notebooks will be added over time, covering small models, e
 - Constraint-driven reduced search
 - Dynamic programming
 - Branch and Bound
+- Structural exact reasoning for continuous LPs
 - AMPL modeling with Python (`amplpy`)
 
 ## Maze API
