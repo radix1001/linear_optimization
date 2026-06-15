@@ -53,6 +53,11 @@ python -m maze_api.client --url http://127.0.0.1:8000 --size 1000 --solver dfs-e
 
 ## How to play
 
+Open the service URL in a browser (e.g. `https://maze-api-1gfd.onrender.com/`)
+for an HTML home with these instructions and links to the live leaderboards.
+The API itself still returns JSON — the HTML is served only to browsers (or
+with `?format=html`).
+
 The rules: from your current cell you only see what is immediately around you
 — each of `N/S/E/W` is `wall`, `path` or `exit`. You move one cell at a time;
 the server remembers your position. You win when you step through the `exit`.

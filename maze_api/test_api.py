@@ -82,6 +82,32 @@ class MazeAPITest(unittest.TestCase):
     def test_health_endpoint(self) -> None:
         self.assertEqual(self._get_json("/health"), {"status": "ok"})
 
+    def test_home_serves_json_by_default(self) -> None:
+        index = self._get_json("/")
+        self.assertIn("endpoints", index)
+        self.assertIn("allowed_sizes", index)
+
+    def test_home_serves_html_to_browsers(self) -> None:
+        body, content_type = self._get_with_accept("/", "text/html")
+        self.assertIn("text/html", content_type)
+        self.assertIn("Cómo jugar", body)
+        self.assertIn("/leaderboard?size=1000&format=html", body)
+
+    def test_leaderboard_html_view(self) -> None:
+        body, content_type = self._get_with_accept("/leaderboard?size=1000&format=html", "*/*")
+        self.assertIn("text/html", content_type)
+        self.assertIn("<table>", body)
+
+    def test_leaderboard_json_unaffected(self) -> None:
+        board = self._get_json("/leaderboard?size=1000")
+        self.assertIn("leaderboard", board)
+        self.assertEqual(board["order"], "time")
+
+    def _get_with_accept(self, path: str, accept: str) -> tuple[str, str]:
+        request = Request(f"{self.base_url}{path}", headers={"Accept": accept})
+        with urlopen(request) as response:
+            return response.read().decode("utf-8"), response.headers.get("Content-Type", "")
+
     def test_init_creates_independent_session(self) -> None:
         created = self._post_json("/init", {"size": 1000, "solver": "tester"})
         self.assertEqual(created["solver"], "tester")

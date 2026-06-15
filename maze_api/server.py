@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import array
+import html
 import json
 import os
 import random
@@ -57,6 +58,30 @@ ALLOWED_SIZES: dict[int, int] = {
     100_000: 316,     # 316 x 316   = 99856 cells
     1_000_000: 1000,  # 1000 x 1000 = 1000000 cells
 }
+
+# Inline stylesheet for the human-facing home and leaderboard pages.
+_HTML_STYLE = (
+    "<style>"
+    "body{margin:0;background:#0f1220;color:#e6e6f0;"
+    "font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}"
+    ".wrap{max-width:880px;margin:0 auto;padding:32px 20px 64px}"
+    "h1{font-size:28px;margin:0 0 6px}"
+    "h2{font-size:20px;margin:30px 0 10px;border-bottom:1px solid #2a2e45;padding-bottom:6px}"
+    "a{color:#8ab4ff;text-decoration:none}a:hover{text-decoration:underline}"
+    "code{background:#1c2036;padding:2px 6px;border-radius:5px;font-size:14px;color:#c8d2ff}"
+    "pre{background:#1c2036;padding:14px 16px;border-radius:8px;overflow:auto;font-size:13px}"
+    "pre code{background:none;padding:0}"
+    "table{border-collapse:collapse;width:100%;margin:8px 0}"
+    "th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #2a2e45;font-size:14px}"
+    "th{color:#9aa3c7;font-weight:600}"
+    "ol li,ul li{margin:6px 0}"
+    ".chip{display:inline-block;background:#1c2036;border:1px solid #2a2e45;border-radius:999px;"
+    "padding:4px 12px;margin:3px 6px 3px 0;font-size:14px}"
+    ".chip.sel{background:#2d5bff;border-color:#2d5bff;color:#fff}"
+    ".muted{color:#9aa3c7}"
+    ".empty{text-align:center;color:#9aa3c7;padding:18px}"
+    "</style>"
+)
 
 
 def generate_seed() -> int:
@@ -649,7 +674,10 @@ class MazeAPIHandler(BaseHTTPRequestHandler):
         params = parse_qs(parsed.query)
 
         if parsed.path == "/":
-            self._json_response(HTTPStatus.OK, self._index_payload())
+            if self._wants_html(params):
+                self._html_response(HTTPStatus.OK, self._home_html())
+            else:
+                self._json_response(HTTPStatus.OK, self._index_payload())
             return
 
         if parsed.path in ("/health", "/healthz"):
@@ -684,7 +712,11 @@ class MazeAPIHandler(BaseHTTPRequestHandler):
             return
 
         if parsed.path in ("/leaderboard", "/results"):
-            self._json_response(HTTPStatus.OK, self._leaderboard_payload(params))
+            payload = self._leaderboard_payload(params)
+            if self._wants_html(params):
+                self._html_response(HTTPStatus.OK, self._leaderboard_html(payload))
+            else:
+                self._json_response(HTTPStatus.OK, payload)
             return
 
         self._json_response(HTTPStatus.NOT_FOUND, {"error": "Endpoint not found."})
@@ -834,6 +866,131 @@ class MazeAPIHandler(BaseHTTPRequestHandler):
             ],
         }
 
+    # ----- HTML pages ----------------------------------------------------
+    def _wants_html(self, params: dict[str, list[str]]) -> bool:
+        fmt = self._single(params, "format")
+        if fmt == "html":
+            return True
+        if fmt == "json":
+            return False
+        return "text/html" in (self.headers.get("Accept") or "")
+
+    def _page(self, title: str, body: str) -> str:
+        return (
+            "<!doctype html><html lang='es'><head><meta charset='utf-8'>"
+            "<meta name='viewport' content='width=device-width, initial-scale=1'>"
+            "<title>" + html.escape(title) + " · Maze API</title>" + _HTML_STYLE +
+            "</head><body><div class='wrap'>" + body + "</div></body></html>"
+        )
+
+    def _home_html(self) -> str:
+        size_rows = "".join(
+            "<tr><td><code>{lvl}</code></td><td>{g}×{g}</td><td>{c:,}</td>"
+            "<td><a href='/leaderboard?size={lvl}&format=html'>ver leaderboard →</a></td></tr>".format(
+                lvl=lvl, g=grid, c=grid * grid
+            )
+            for lvl, grid in sorted(ALLOWED_SIZES.items())
+        )
+        endpoint_rows = "".join(
+            "<tr><td><code>{}</code></td><td>{}</td></tr>".format(html.escape(path), html.escape(desc))
+            for path, desc in self._index_payload()["endpoints"].items()
+        )
+        quickstart = html.escape(
+            "URL=https://maze-api-1gfd.onrender.com\n"
+            "# 1) iniciar partida (devuelve session_id y arranca el cronómetro)\n"
+            'curl -s -X POST $URL/init -d \'{"size":1000,"solver":"tu-nombre"}\'\n'
+            "# 2) mirar alrededor / moverse\n"
+            'curl -s "$URL/state?session=SID"\n'
+            'curl -s -X POST $URL/move  -d \'{"session":"SID","direction":"E"}\'\n'
+            "# 3) o resolver entero y mandar la ruta en una sola request\n"
+            'curl -s -X POST $URL/moves -d \'{"session":"SID","moves":"EENSS..."}\'\n'
+            "# 4) comparar\n"
+            'curl -s "$URL/leaderboard?size=1000"'
+        )
+        body = (
+            "<h1>🌀 Maze API</h1>"
+            "<p class='muted'>Resuelve laberintos contra esta API y compara cuánto demora tu "
+            "solver. Tu posición se guarda en el servidor entre requests y el tiempo se mide "
+            "desde <code>/init</code> hasta que sales.</p>"
+            "<h2>Cómo jugar</h2>"
+            "<ol>"
+            "<li><b>Inicia una partida:</b> <code>POST /init</code> con "
+            "<code>{\"size\": 1000, \"solver\": \"tu-nombre\"}</code>. Te devuelve un "
+            "<code>session_id</code> y arranca el cronómetro. Tamaños válidos abajo; sin seed "
+            "(cada laberinto es aleatorio).</li>"
+            "<li><b>Mira a tu alrededor:</b> cada dirección <code>N/S/E/W</code> es "
+            "<code>wall</code> (muro), <code>path</code> (camino) o <code>exit</code> (salida). "
+            "Consúltalo en <code>/state</code> o en la respuesta de cada movimiento.</li>"
+            "<li><b>Muévete:</b> <code>POST /move</code> con "
+            "<code>{\"session\":\"…\",\"direction\":\"N\"}</code>. Chocar un muro responde 409 y "
+            "<i>no</i> cuesta movimiento. Tu posición persiste entre requests.</li>"
+            "<li><b>Sal:</b> la jugada que cruza la <code>exit</code> devuelve tu "
+            "<code>elapsed_seconds</code> y total de movimientos.</li>"
+            "<li><b>Compara:</b> mira el <a href='/leaderboard?format=html'>leaderboard</a> de tu "
+            "tamaño.</li>"
+            "</ol>"
+            "<p class='muted'><b>Dos estrategias:</b> paso a paso con <code>/move</code> (un "
+            "request por celda) o descargar el laberinto con <code>/ascii</code>, resolverlo y "
+            "enviar toda la ruta con <code>POST /moves</code> en una sola request. Para 10⁵ celdas "
+            "o más, usa <code>/moves</code>.</p>"
+            "<h2>Tamaños y leaderboards</h2>"
+            "<table><tr><th>size (celdas)</th><th>grilla</th><th>celdas</th><th>ranking</th></tr>"
+            + size_rows +
+            "</table>"
+            "<p><a href='/leaderboard?format=html'>→ Leaderboard combinado (todos los tamaños)</a></p>"
+            "<h2>Endpoints</h2>"
+            "<table><tr><th>método y ruta</th><th>descripción</th></tr>" + endpoint_rows + "</table>"
+            "<h2>Inicio rápido (curl)</h2>"
+            "<pre>" + quickstart + "</pre>"
+        )
+        return self._page("Inicio", body)
+
+    def _leaderboard_html(self, payload: dict[str, Any]) -> str:
+        entries = payload.get("leaderboard", [])
+        size = payload.get("size")
+        order = payload.get("order", "time")
+
+        def chip(href: str, label: str, selected: bool) -> str:
+            cls = "chip sel" if selected else "chip"
+            return "<a class='{}' href='{}'>{}</a>".format(cls, href, html.escape(label))
+
+        size_nav = "".join(
+            chip("/leaderboard?size={}&order={}&format=html".format(lvl, order), "{:,}".format(lvl), lvl == size)
+            for lvl in sorted(ALLOWED_SIZES)
+        )
+        size_nav += chip("/leaderboard?order={}&format=html".format(order), "todos", size is None)
+
+        base = ("size=" + str(size) + "&") if size else ""
+        order_nav = (
+            chip("/leaderboard?{}order=time&format=html".format(base), "por tiempo", order == "time")
+            + chip("/leaderboard?{}order=moves&format=html".format(base), "por movimientos", order == "moves")
+        )
+
+        rows = "".join(
+            "<tr><td>{rank}</td><td>{solver}</td><td>{size:,}</td><td>{grid}</td>"
+            "<td>{moves:,}</td><td>{sec:.3f}</td><td class='muted'>{when}</td></tr>".format(
+                rank=entry.get("rank"),
+                solver=html.escape(str(entry.get("solver") or "—")),
+                size=entry.get("size", 0),
+                grid=entry.get("grid", "—"),
+                moves=entry.get("moves", 0),
+                sec=entry.get("elapsed_seconds", 0.0),
+                when=html.escape(str(entry.get("finished_at_iso", ""))[:19].replace("T", " ")),
+            )
+            for entry in entries
+        ) or "<tr><td colspan='7' class='empty'>Sin corridas todavía.</td></tr>"
+
+        scope = "tamaño {:,}".format(size) if size else "todos los tamaños"
+        body = (
+            "<h1>🏁 Leaderboard <span class='muted'>· " + scope + "</span></h1>"
+            "<p><a href='/?format=html'>← Inicio</a></p>"
+            "<p>Tamaño: " + size_nav + "</p>"
+            "<p>Orden: " + order_nav + "</p>"
+            "<table><tr><th>#</th><th>solver</th><th>size</th><th>grilla</th>"
+            "<th>movs</th><th>seg</th><th>terminó (UTC)</th></tr>" + rows + "</table>"
+        )
+        return self._page("Leaderboard", body)
+
     # ----- helpers -------------------------------------------------------
     def _require_session(self, session_id: str | None) -> Session | None:
         session = self.store.resolve(session_id)
@@ -895,6 +1052,15 @@ class MazeAPIHandler(BaseHTTPRequestHandler):
         response = payload.encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "text/plain; charset=utf-8")
+        self.send_header("Content-Length", str(len(response)))
+        self._send_cors_headers()
+        self.end_headers()
+        self.wfile.write(response)
+
+    def _html_response(self, status: int, payload: str) -> None:
+        response = payload.encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(response)))
         self._send_cors_headers()
         self.end_headers()
