@@ -1,10 +1,23 @@
-from .server import Cell, Maze, MazeGame, create_server, main
+from .server import (
+    Cell,
+    Maze,
+    MazeGame,
+    ResultStore,
+    Session,
+    SessionStore,
+    create_server,
+    main,
+)
 
 __all__ = [
     "Cell",
     "Maze",
     "MazeGame",
+    "MazeClient",
     "ParsedMaze",
+    "ResultStore",
+    "Session",
+    "SessionStore",
     "SolveResult",
     "create_server",
     "main",
@@ -18,4 +31,8 @@ def __getattr__(name: str):
         from . import solver
 
         return getattr(solver, name)
+    if name == "MazeClient":
+        from .client import MazeClient
+
+        return MazeClient
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

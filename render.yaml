@@ -1,0 +1,26 @@
+# Render Blueprint for the maze API.
+# Deploy by pushing this repo and creating a Blueprint at https://render.com,
+# or wire it up manually as a Web Service with the commands below.
+services:
+  - type: web
+    name: maze-api
+    runtime: python
+    # Paid instance: it does not spin down on idle, so timings stay comparable
+    # and long runs on the 100000-cell maze are not interrupted.
+    plan: starter
+    # The API uses only the standard library, so the build is a no-op install.
+    buildCommand: "pip install -r requirements.txt"
+    # Render injects $PORT; the server also reads it from the environment.
+    startCommand: "python -m maze_api --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      # Persist the leaderboard across restarts on the mounted disk below.
+      - key: MAZE_DB_PATH
+        value: "/var/data/maze.db"
+    # Persistent disk so the leaderboard survives restarts and redeploys.
+    disk:
+      name: maze-data
+      mountPath: /var/data
+      sizeGB: 1

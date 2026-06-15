@@ -1,0 +1,3 @@
+# The maze API (maze_api/) runs on the Python standard library only.
+# This file exists so Render's default `pip install -r requirements.txt`
+# build step succeeds with no extra dependencies to install.
